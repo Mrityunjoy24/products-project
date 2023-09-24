@@ -1,8 +1,7 @@
 package com.mrityunjoy24.productservice3.controllers;
 
+import com.mrityunjoy24.productservice3.dtos.GenericAddProductDto;
 import com.mrityunjoy24.productservice3.dtos.GenericProductDto;
-import com.mrityunjoy24.productservice3.dtos.ProductDto;
-import com.mrityunjoy24.productservice3.models.Product;
 import com.mrityunjoy24.productservice3.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,26 +21,19 @@ public class ProductController {
         this.productService = productService;
     }
     @GetMapping("/all")
-    public ResponseEntity<List<Product>> getAllProducts(){
-        List<Product> products =  productService.getAllProducts();
+    public ResponseEntity<List<GenericProductDto>> getAllProducts(){
+        List<GenericProductDto> products =  productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable(value = "id") Long productId){
-        Product product = productService.getProductById(productId);
-
-        ProductDto productDto = new ProductDto();
-        productDto.setName(product.getTitle());
-        productDto.setDescription(product.getDescription());
-        productDto.setPrice(product.getPrice());
-        productDto.setRating(product.getRating());
-        productDto.setCategory(product.getCategory());
-
-        return ResponseEntity.ok(productDto);
+    public ResponseEntity<GenericProductDto> getProductById(@PathVariable(value = "id") Long productId){
+        GenericProductDto product = productService.getProductById(productId);
+        return ResponseEntity.ok(product);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<GenericProductDto> addProduct(@RequestBody GenericProductDto product){
+    public ResponseEntity<GenericProductDto> addProduct(@RequestBody GenericAddProductDto product){
         GenericProductDto newGenericProductDto = productService.addProduct(product);
         return ResponseEntity.ok(newGenericProductDto);
     }
