@@ -1,7 +1,6 @@
 package com.mrityunjoy24.productservice3.exceptions;
 
 import com.mrityunjoy24.productservice3.dtos.ExceptionDto;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,7 +13,7 @@ public class ControllerAdvices {
             NotFoundException notFoundException
     ) {
 
-        return new ResponseEntity(
+        return new ResponseEntity<>(
                 new ExceptionDto(HttpStatus.NOT_FOUND, notFoundException.getMessage()),
                 HttpStatus.NOT_FOUND
         );
@@ -25,7 +24,7 @@ public class ControllerAdvices {
             ArrayIndexOutOfBoundsException notFoundException
     ) {
 
-        return new ResponseEntity(
+        return new ResponseEntity<>(
                 new ExceptionDto(HttpStatus.NOT_FOUND, notFoundException.getMessage()),
                 HttpStatus.NOT_FOUND
         );
