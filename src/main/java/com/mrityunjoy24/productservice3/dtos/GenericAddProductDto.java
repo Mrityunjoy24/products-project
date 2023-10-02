@@ -1,6 +1,7 @@
 package com.mrityunjoy24.productservice3.dtos;
 
 
+import com.mrityunjoy24.productservice3.models.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,5 +12,5 @@ public class GenericAddProductDto {
     private Double price;
     private String description;
     private String image;
-    private String category;
+    private Category category;
 }

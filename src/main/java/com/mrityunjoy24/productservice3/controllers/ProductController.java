@@ -2,6 +2,8 @@ package com.mrityunjoy24.productservice3.controllers;
 
 import com.mrityunjoy24.productservice3.dtos.GenericAddProductDto;
 import com.mrityunjoy24.productservice3.dtos.GenericProductDto;
+import com.mrityunjoy24.productservice3.models.Rating;
+import com.mrityunjoy24.productservice3.repositories.RatingRepository;
 import com.mrityunjoy24.productservice3.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +19,7 @@ public class ProductController {
 
     @Value("${productService.type}")
     private String productServiceName;
-    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService){
+    public ProductController(@Qualifier("SelfProductService") ProductService productService){
         this.productService = productService;
     }
     @GetMapping("/all")
@@ -27,7 +29,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GenericProductDto> getProductById(@PathVariable(value = "id") Long productId){
+    public ResponseEntity<GenericProductDto> getProductById(@PathVariable(value = "id") String productId){
         GenericProductDto product = productService.getProductById(productId);
         return ResponseEntity.ok(product);
     }
@@ -37,4 +39,17 @@ public class ProductController {
         GenericProductDto newGenericProductDto = productService.addProduct(product);
         return ResponseEntity.ok(newGenericProductDto);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable(value = "id") String productId){
+        String response = productService.deleteProduct(productId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericProductDto> updateProduct(@PathVariable("id") String id,@RequestBody GenericProductDto genericProductDto){
+        GenericProductDto genericProductDto1 = productService.updateProduct(id,genericProductDto);
+        return ResponseEntity.ok(genericProductDto1);
+    }
+
 }

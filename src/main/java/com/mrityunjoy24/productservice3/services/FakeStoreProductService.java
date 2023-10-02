@@ -1,8 +1,6 @@
 package com.mrityunjoy24.productservice3.services;
 
-import com.mrityunjoy24.productservice3.dtos.FakeStoreProductDto;
-import com.mrityunjoy24.productservice3.dtos.GenericAddProductDto;
-import com.mrityunjoy24.productservice3.dtos.GenericProductDto;
+import com.mrityunjoy24.productservice3.dtos.*;
 import com.mrityunjoy24.productservice3.models.Product;
 import com.mrityunjoy24.productservice3.models.Rating;
 import com.mrityunjoy24.productservice3.thirdpartyClients.FakeStoreProductServiceClient;
@@ -13,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
@@ -33,8 +32,8 @@ public class FakeStoreProductService implements ProductService{
         return genericProductDtos;
     }
 
-    public GenericProductDto getProductById(Long productId){
-        FakeStoreProductDto fakeStoreProductDto = fakeStoreProductServiceClient.getProductById(productId);
+    public GenericProductDto getProductById(String productId){
+        FakeStoreProductDto fakeStoreProductDto = fakeStoreProductServiceClient.getProductById(Long.parseLong(productId));
         GenericProductDto product = createProductFromFakeStoreProductDto(fakeStoreProductDto);
         return product;
     }
@@ -45,7 +44,7 @@ public class FakeStoreProductService implements ProductService{
         FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
         fakeStoreProductDto.setTitle(product.getTitle());
         fakeStoreProductDto.setDescription(product.getDescription());
-        fakeStoreProductDto.setId(1134L);
+        fakeStoreProductDto.setId(UUID.randomUUID());
         fakeStoreProductDto.setCategory(product.getCategory());
         fakeStoreProductDto.setImage(product.getImage());
         fakeStoreProductDto.setPrice(123.4);
@@ -61,19 +60,39 @@ public class FakeStoreProductService implements ProductService{
         return createProductFromFakeStoreProductDto(fakeStoreProductDto);
     }
 
+    @Override
+    public GenericProductDto updateProduct(String productId, GenericProductDto product) {
+        return null;
+    }
+
+    @Override
+    public String deleteProduct(String productId) {
+        return  null;
+    }
 
     public GenericProductDto createProductFromFakeStoreProductDto(FakeStoreProductDto fakeStoreProductDto){
-        GenericProductDto product = new GenericProductDto();
-        product.setTitle(fakeStoreProductDto.getTitle());
-        product.setDescription(fakeStoreProductDto.getDescription());
-        product.setPrice(fakeStoreProductDto.getPrice());
-        product.setCategory(fakeStoreProductDto.getCategory());
+        GenericProductDto genericProductDto = new GenericProductDto();
+        genericProductDto.setTitle(fakeStoreProductDto.getTitle());
+        genericProductDto.setDescription(fakeStoreProductDto.getDescription());
+        genericProductDto.setPrice(fakeStoreProductDto.getPrice());
+
+
+        GenericCategoryDto genericCategoryDto = new GenericCategoryDto();
+        genericCategoryDto.setName(fakeStoreProductDto.getCategory().getName());
+        genericCategoryDto.setDescription(fakeStoreProductDto.getCategory().getDescription());
+
+        genericProductDto.setCategory(genericCategoryDto);
 
         Rating rating = new Rating();
         rating.setCount(fakeStoreProductDto.getRating().getCount());
         rating.setRate(fakeStoreProductDto.getRating().getRate());
 
-        product.setRating(rating);
-        return product;
+        GenericRatingDto genericRatingDto = new GenericRatingDto();
+        genericRatingDto.setRate(genericProductDto.getRating().getRate());
+        genericRatingDto.setCount(genericProductDto.getRating().getCount());
+
+
+        genericProductDto.setRating(genericRatingDto);
+        return genericProductDto;
     }
 }

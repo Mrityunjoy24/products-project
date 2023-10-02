@@ -1,5 +1,6 @@
 package com.mrityunjoy24.productservice3.dtos;
 
+import com.mrityunjoy24.productservice3.models.Category;
 import com.mrityunjoy24.productservice3.models.Rating;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,6 @@ public class GenericProductDto {
     private String title;
     private Double price;
     private String description;
-    private String category;
-    private Rating rating;
+    private GenericCategoryDto category;
+    private GenericRatingDto rating;
 }
