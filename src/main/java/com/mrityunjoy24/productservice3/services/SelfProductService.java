@@ -4,6 +4,7 @@ import com.mrityunjoy24.productservice3.dtos.GenericAddProductDto;
 import com.mrityunjoy24.productservice3.dtos.GenericCategoryDto;
 import com.mrityunjoy24.productservice3.dtos.GenericProductDto;
 import com.mrityunjoy24.productservice3.dtos.GenericRatingDto;
+import com.mrityunjoy24.productservice3.exceptions.NotFoundException;
 import com.mrityunjoy24.productservice3.models.Category;
 import com.mrityunjoy24.productservice3.models.Product;
 import com.mrityunjoy24.productservice3.models.Rating;
@@ -39,13 +40,13 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDto getProductById(String productId) {
+    public GenericProductDto getProductById(String productId) throws NotFoundException {
 
         UUID uuid = UUID.fromString(productId);
         Optional<Product> product1 = productRepository.findById(uuid);
 
         if (product1.isEmpty()){
-            return null;
+            throw new NotFoundException("Product not found");
         }
 
         Product product = product1.get();
